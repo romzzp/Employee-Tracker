@@ -170,3 +170,55 @@ function isManager() {
     });
 }
 
+function addNewEmployee() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "first_name",
+                message: "What is the employee's first name?"
+            },
+            {
+                type: "input",
+                name: "last_name",
+                message: "What is the employee's last name?"
+            },
+            {
+                type: "input",
+                name: "role_id",
+                message: "What is the employee's role id?"
+            },
+            {
+                type: "input",
+                name: "manager_id",
+                message: "What is the employee's manager id?"
+            }
+        ]).then(function (res) {
+            var query = "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
+            connection.query(query, [res.first_name, res.last_name, res.role_id, res.manager_id], function (err) {
+                if (err) throw err;
+                console.log("Successfully added a new employee.");
+                updateEmployeeData();
+                employeeSearch();
+            });
+        });
+}
+
+function addNewDepartment() {
+    inquirer
+        .prompt(
+            [{
+                type: "input",
+                name: "department_name",
+                message: "What Department would you like to add?"
+            }
+            ]).then(function (answer) {
+                var query = "INSERT INTO department (name) VALUE (?)";
+                connection.query(query, answer.department_name, function (err) {
+                    if (err) throw err;
+                    console.log(`Successfully added: ${answer.department_name}`);
+                    updateDepartment();
+                    employeeSearch();
+                });
+            });
+}
