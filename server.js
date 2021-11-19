@@ -283,3 +283,46 @@ function updateRole() {
     });
 }
 
+function updatedDB() {
+    var query = `select * from employee`;
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        employeeSearch();
+    });
+}
+
+function updateDatabase() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "empID",
+                message: "Enter the ID of the employee you want to update."
+            },
+            {
+                type: "input",
+                name: "newTitle",
+                message: "Enter the new title"
+            },
+            {
+                type: "input",
+                name: "newSalary",
+                message: "Enter the new salary"
+            },
+            {
+                type: "input",
+                name: "newDeptID",
+                message: "Enter the new department ID."
+            }
+        ]).then(function (answer) {
+            var query = "UPDATE role SET title = ?, salary = ?, department_id = ? WHERE id = ?";
+            connection.query(query, [answer.newTitle, answer.newSalary, answer.newDeptID, parseInt(answer.empID)], function (err) {
+                if (err) throw err;
+                console.log("Successfully updated the employee.");
+                updateRole();
+                employeeSearch();
+            });
+        })
+}
+
