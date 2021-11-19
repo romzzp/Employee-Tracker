@@ -151,3 +151,21 @@ function empPay() {
         employeeSearch();
     });
 }
+
+function isManager() {
+    var query = `SELECT CONCAT (e.first_name, ' ', e.last_name) AS Manager, r.title, r.salary 
+    FROM employee e 
+    LEFT JOIN role r
+        ON e.role_id = r.id
+      LEFT JOIN department d
+      ON d.id = r.department_id
+      LEFT JOIN employee m
+        ON m.id = e.manager_id
+    WHERE e.manager_id IS NOT NULL`;
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        console.log("All managers were viewed.");
+        employeeSearch();
+    });
+}
