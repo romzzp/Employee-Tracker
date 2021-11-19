@@ -95,9 +95,25 @@ function employeeData() {
       ON m.id = e.manager_id`;
     connection.query(query, function (err, res) {
         if (err) throw err;
-        // console.log("Error trying to get all employees");
         console.table(res);
         console.log("All employees were viewed.");
+        employeeSearch();
+    });
+}
+
+function empDepartment() {
+    var query = `SELECT d.id, d.name AS Department, r.salary AS salary 
+    FROM employee e
+    LEFT JOIN role r
+        ON e.role_id = r.id
+      LEFT JOIN department d
+      ON d.id = r.department_id
+      LEFT JOIN employee m
+        ON m.id = e.manager_id`;
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        console.log("All Departments were viewed.");
         employeeSearch();
     });
 }
