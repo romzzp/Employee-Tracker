@@ -326,3 +326,31 @@ function updateDatabase() {
         })
 }
 
+function rmEmployee() {
+    var empId = "SELECT * FROM employee ORDER BY id"
+    connection.query(empId, function (err, res) {
+        if (err) throw err;
+        var empArr = [];
+        for (var i = 0; i < res.length; i++) {
+            empArr.push(res[i].id + " " + res[i].first_name + " " + res[i].last_name);
+        }
+        console.log(empArr);
+
+        inquirer.prompt([
+            {
+                type: "list",
+                message: "Please select the employee you want to remove!",
+                choices: empArr,
+                name: "rmEmp"
+            }
+        ]).then(function (res) {
+            var parse = parseInt(res.rmEmp.split(" "));
+            var query = `DELETE FROM employee WHERE id = ${parse}`;
+            connection.query(query, function (err) {
+                if (err) throw err;
+                console.log("Employee Successfully removed.");
+                employeeSearch();
+            });
+        })
+    });
+}
