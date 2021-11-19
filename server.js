@@ -222,3 +222,34 @@ function addNewDepartment() {
                 });
             });
 }
+
+function addNewRole() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "title",
+                message: "Describe the employee's new role."
+            },
+            {
+                type: "input",
+                name: "department_id",
+                message: "What is the employee's department id?"
+                // choices: [1,2,3,4]
+            },
+            {
+                type: "input",
+                name: "salary",
+                message: "What is the salary of this employee for this role?",
+            }
+        ]).then(function (res) {
+            var query = "INSERT INTO role (title, department_id, salary) VALUES (?, ?, ?)";
+            connection.query(query, [res.title, res.department_id, res.salary], function (err) {
+                if (err) throw err;
+                console.log(`Successfully added role for: ${res.title}`);
+                updateRole();
+                employeeSearch();
+            });
+        });
+}
+
