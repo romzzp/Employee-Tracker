@@ -253,3 +253,33 @@ function addNewRole() {
         });
 }
 
+function updateEmployeeData() {
+    var query = `SELECT * FROM employee`;
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        console.log("Successfully updated the employee table.");
+        employeeSearch();
+    });
+}
+
+function updateDepartment() {
+    var query = `SELECT * FROM department`;
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        console.log("Successfully updated the department table.");
+        employeeSearch();
+    });
+}
+
+function updateRole() {
+    var query = `SELECT * FROM role`;
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        console.log("Successfully updated the role table");
+        employeeSearch();
+    });
+}
+
