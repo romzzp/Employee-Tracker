@@ -1,5 +1,5 @@
-var mysql = require("mysql");
-var inquirer = require("inquirer");
+const mysql = require("mysql");
+const inquirer = require("inquirer");
 const { config } = require("process");
 const logo = require("asciiart-logo");
 require("console.table");
@@ -10,16 +10,15 @@ function display() {
     console.log(logoText);
 }
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
     host: "localhost",
-    port: 3006,
     user: "root",
     password: "vrz126117",
-    database: "employees"
+    database: "employees_DB"
 });
 
 connection.connect(function (err) {
-    if (err) throw err;
+    if (err) console.log(err);
     employeeSearch();
 });
 
@@ -94,7 +93,7 @@ function employeeData() {
     LEFT JOIN employee m
       ON m.id = e.manager_id`;
     connection.query(query, function (err, res) {
-        if (err) throw err;
+        if (err) console.log(err);
         console.table(res);
         console.log("All employees were viewed.");
         employeeSearch();
@@ -111,7 +110,7 @@ function empDepartment() {
       LEFT JOIN employee m
         ON m.id = e.manager_id`;
     connection.query(query, function (err, res) {
-        if (err) throw err;
+        if (err) console.log(err);
         console.table(res);
         console.log("All Departments were viewed.");
         employeeSearch();
@@ -128,7 +127,7 @@ function empRole() {
       LEFT JOIN employee m
         ON m.id = e.manager_id`;
     connection.query(query, function (err, res) {
-        if (err) throw err;
+        if (err) console.log(err);
         console.table(res);
         console.log("All Roles were viewed");
         employeeSearch();
@@ -145,7 +144,7 @@ function empPay() {
       LEFT JOIN employee m
         ON m.id = e.manager_id`;
     connection.query(query, function (err, res) {
-        if (err) throw err;
+        if (err) console.log(err);
         console.table(res);
         console.log("All Employees' salary were viewed.");
         employeeSearch();
@@ -163,7 +162,7 @@ function isManager() {
         ON m.id = e.manager_id
     WHERE e.manager_id IS NOT NULL`;
     connection.query(query, function (err, res) {
-        if (err) throw err;
+        if (err) console.log(err);
         console.table(res);
         console.log("All managers were viewed.");
         employeeSearch();
@@ -196,7 +195,7 @@ function addNewEmployee() {
         ]).then(function (res) {
             var query = "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
             connection.query(query, [res.first_name, res.last_name, res.role_id, res.manager_id], function (err) {
-                if (err) throw err;
+                if (err) console.log(err);
                 console.log("Successfully added a new employee.");
                 updateEmployeeData();
                 employeeSearch();
@@ -215,7 +214,7 @@ function addNewDepartment() {
             ]).then(function (answer) {
                 var query = "INSERT INTO department (name) VALUE (?)";
                 connection.query(query, answer.department_name, function (err) {
-                    if (err) throw err;
+                    if (err) console.log(err);
                     console.log(`Successfully added: ${answer.department_name}`);
                     updateDepartment();
                     employeeSearch();
@@ -245,7 +244,7 @@ function addNewRole() {
         ]).then(function (res) {
             var query = "INSERT INTO role (title, department_id, salary) VALUES (?, ?, ?)";
             connection.query(query, [res.title, res.department_id, res.salary], function (err) {
-                if (err) throw err;
+                if (err) console.log(err);
                 console.log(`Successfully added role for: ${res.title}`);
                 updateRole();
                 employeeSearch();
@@ -256,7 +255,7 @@ function addNewRole() {
 function updateEmployeeData() {
     var query = `SELECT * FROM employee`;
     connection.query(query, function (err, res) {
-        if (err) throw err;
+        if (err) console.log(err);
         console.table(res);
         console.log("Successfully updated the employee table.");
         employeeSearch();
@@ -266,7 +265,7 @@ function updateEmployeeData() {
 function updateDepartment() {
     var query = `SELECT * FROM department`;
     connection.query(query, function (err, res) {
-        if (err) throw err;
+        if (err) console.log(err);
         console.table(res);
         console.log("Successfully updated the department table.");
         employeeSearch();
@@ -276,7 +275,7 @@ function updateDepartment() {
 function updateRole() {
     var query = `SELECT * FROM role`;
     connection.query(query, function (err, res) {
-        if (err) throw err;
+        if (err) console.log(err);
         console.table(res);
         console.log("Successfully updated the role table");
         employeeSearch();
@@ -286,7 +285,7 @@ function updateRole() {
 function updatedDB() {
     var query = `select * from employee`;
     connection.query(query, function (err, res) {
-        if (err) throw err;
+        if (err) console.log(err);
         console.table(res);
         employeeSearch();
     });
@@ -318,7 +317,7 @@ function updateDatabase() {
         ]).then(function (answer) {
             var query = "UPDATE role SET title = ?, salary = ?, department_id = ? WHERE id = ?";
             connection.query(query, [answer.newTitle, answer.newSalary, answer.newDeptID, parseInt(answer.empID)], function (err) {
-                if (err) throw err;
+                if (err) console.log(err);
                 console.log("Successfully updated the employee.");
                 updateRole();
                 employeeSearch();
@@ -329,7 +328,7 @@ function updateDatabase() {
 function rmEmployee() {
     var empId = "SELECT * FROM employee ORDER BY id"
     connection.query(empId, function (err, res) {
-        if (err) throw err;
+        if (err) console.log(err);
         var empArr = [];
         for (var i = 0; i < res.length; i++) {
             empArr.push(res[i].id + " " + res[i].first_name + " " + res[i].last_name);
@@ -347,10 +346,11 @@ function rmEmployee() {
             var parse = parseInt(res.rmEmp.split(" "));
             var query = `DELETE FROM employee WHERE id = ${parse}`;
             connection.query(query, function (err) {
-                if (err) throw err;
-                console.log("Employee Successfully removed.");
+                if (err) console.log(err);
+                console.log("Successfully removed employee.");
                 employeeSearch();
             });
         })
     });
 }
+// employeeSearch();

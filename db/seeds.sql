@@ -1,4 +1,4 @@
-use employees;
+use employees_DB;
 
 INSERT INTO department (name)
 VALUES
@@ -18,8 +18,6 @@ VALUES
     ('Accountant', 125000, 3),
     ('Legal Team Lead', 250000, 4),
     ('Lawyer', 190000, 4);
-
--- Change the names for the employees
 
 INSERT INTO employee
     (first_name, last_name, role_id, manager_id)
